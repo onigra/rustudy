@@ -23,18 +23,21 @@ impl Philosopher {
     fn thinking(&self) {
         let thinking_time = rand::thread_rng().gen_range(1, 150);
         thread::sleep(Duration::from_millis(thinking_time));
-        println!("------ {} is hungry------", self.name);
+        println!("~~~~~~ {} go to dining ~~~~~~", self.name);
     }
 
     fn eat(&self, table: &Table) {
+        println!("{0} pick fork No. {1}", self.name, self.left);
         let _left = table.forks[self.left].lock().unwrap();
+        println!("----- Current forks: {:?}", table.forks);
+
+        println!("{0} pick fork No. {1}", self.name, self.right);
         let _right = table.forks[self.right].lock().unwrap();
+        println!("----- Current forks: {:?}", table.forks);
 
         println!("{} is eating......", self.name);
-
         thread::sleep(Duration::from_millis(1000));
-
-        println!("{} is done eating!!!!!", self.name);
+        println!("!!!!! {} is done eating !!!!!", self.name);
     }
 }
 
