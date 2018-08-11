@@ -1,3 +1,6 @@
+extern crate rand;
+
+use rand::Rng;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
@@ -17,16 +20,21 @@ impl Philosopher {
         }
     }
 
+    fn thinking(&self) {
+        let thinking_time = rand::thread_rng().gen_range(1, 150);
+        thread::sleep(Duration::from_millis(thinking_time));
+        println!("------ {} is hungry------", self.name);
+    }
+
     fn eat(&self, table: &Table) {
         let _left = table.forks[self.left].lock().unwrap();
-        thread::sleep(Duration::from_millis(150));
         let _right = table.forks[self.right].lock().unwrap();
 
-        println!("{} is eating.", self.name);
+        println!("{} is eating......", self.name);
 
         thread::sleep(Duration::from_millis(1000));
 
-        println!("{} is done eating.", self.name);
+        println!("{} is done eating!!!!!", self.name);
     }
 }
 
@@ -59,6 +67,7 @@ fn main() {
             let table = table.clone();
 
             thread::spawn(move || {
+                p.thinking();
                 p.eat(&table);
             })
         })
